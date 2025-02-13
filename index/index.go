@@ -24,6 +24,29 @@ type Indexer interface {
 	Delete(key []byte) bool
 }
 
+type IndexType = int8
+
+const (
+	// Btree 索引
+	Btree IndexType = iota + 1
+
+	// ART 自适应基数树索引
+	ART
+)
+
+// NewIndexer 根据类型初始化索引
+func NewIndexer(typ IndexType) Indexer {
+	switch typ {
+	case Btree:
+		return NewBTree()
+	case ART:
+		// todo
+		return nil
+	default:
+		panic("unsupported index type")
+	}
+}
+
 // Item 由于 Btree 中自带的 Item 接口不符合预期，则自己创建
 type Item struct {
 	key []byte             // 键值
